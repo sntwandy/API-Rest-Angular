@@ -1,13 +1,21 @@
+<button (click)="toggleProductDetail()">Click</button>
 <div class="products--grid">
   <app-product
     [product]="product"
     *ngFor="let product of products"
     (addedProduct)="onAddToShoppingCart($event)"
+    (showProductDetail)="onShowProductDetail($event)"
   ></app-product>
-  <div class="product-detail">
-    <div>
-      <button>Close</button>
-      Contenido
+  <div class="product-detail" [class.active]="showProductDetail">
+    <div *ngIf="productChoosen">
+      <button (click)="toggleProductDetail()">Close</button>
+      <h2>{{ productChoosen.title }}</h2>
+      <swiper-container>
+        <swiper-slide *ngFor="let img of productChoosen.images">
+          <img [src]="img" [alt]="productChoosen.title" />
+        </swiper-slide>
+      </swiper-container>
+      <p>{{ productChoosen.description }}</p>
     </div>
   </div>
 </div>

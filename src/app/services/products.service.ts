@@ -25,4 +25,8 @@ export class ProductsService {
   update(id: string, dto: UpdateProductDTO) {
     return this.http.put<Product>(`${API_URL}/${id}`, dto);
   }
+
+  delete(id: string){
+    return this.http.delete<boolean>(`${API_URL}/${id}`);
+  }
 }

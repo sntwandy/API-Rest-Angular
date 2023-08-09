@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { CreateProductDTO, Product, UpdateProductDTO } from './../models/product.model';
 import { API_URL } from 'src/app/constant';
+import { retry } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,8 @@ export class ProductsService {
       params = params.set('offset', offset);
     }
 
-    return this.http.get<Product[]>(API_URL, { params });
+    return this.http.get<Product[]>(API_URL, { params })
+      .pipe(retry(2));
   }
 
   getProduct(id: string) {

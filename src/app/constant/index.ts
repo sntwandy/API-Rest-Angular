@@ -1,7 +1,8 @@
 import { Product } from "../models/product.model";
+import { environment } from 'src/environments/environment';
 
 // API URL
-export const API_URL = 'https://young-sands-07814.herokuapp.com/api/products';
+export const API_URL = `${environment.API_URL}/api/products`;
 
 // INITIAL DATA FOR PRODUCT
 export const PRODUCT_INITIAL_STATE: Product = {

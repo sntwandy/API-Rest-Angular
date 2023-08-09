@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-
+import { HttpClient, HttpParams, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 import { CreateProductDTO, Product, UpdateProductDTO } from './../models/product.model';
 import { API_URL } from 'src/app/constant';
 import { retry } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,20 @@ export class ProductsService {
   }
 
   getProduct(id: string) {
-    return this.http.get<Product>(`${API_URL}/${id}`);
+    return this.http.get<Product>(`${API_URL}/${id}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.Conflict) {
+            return throwError('Something is wrong on the server');
+          }
+
+          if (error.status === HttpStatusCode.NotFound) {
+            return throwError('The item doesnt exist');
+          }
+
+          return throwError('Uppsss there are something wrong :(')
+        })
+      );
   }
 
   create(dto: CreateProductDTO) {

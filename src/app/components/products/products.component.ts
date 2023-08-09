@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CreateProductDTO, Product, UpdateProductDTO } from '../../models/product.model';
 
 import { PRODUCT_INITIAL_STATE } from 'src/app/constant';
@@ -20,6 +19,7 @@ export class ProductsComponent implements OnInit {
   productChoosen: Product = PRODUCT_INITIAL_STATE;
   limit = 10;
   offset = 0;
+  statusDetail: 'loading' | 'success' | 'error' | 'init' = 'init';
 
   constructor(
     private storeService: StoreService,
@@ -43,8 +43,13 @@ export class ProductsComponent implements OnInit {
 
   onShowProductDetail(id: string) {
     this.productsService.getProduct(id).subscribe((data) => {
+      this.statusDetail = 'loading';
       this.productChoosen = data;
       this.toggleProductDetail();
+      this.statusDetail = 'success';
+    }, errorMessage => {
+      window.alert(errorMessage);
+      this.statusDetail = 'error';
     });
   }
 

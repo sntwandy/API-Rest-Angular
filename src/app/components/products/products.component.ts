@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CreateProductDTO, Product, UpdateProductDTO } from '../../models/product.model';
 
+import { switchMap } from 'rxjs/operators';
+
 import { PRODUCT_INITIAL_STATE } from 'src/app/constant';
 
 import { StoreService } from '../../services/store.service';
@@ -51,6 +53,14 @@ export class ProductsComponent implements OnInit {
       window.alert(errorMessage);
       this.statusDetail = 'error';
     });
+  }
+
+  readAndUpdate(id: string) {
+    this.productsService.getProduct(id)
+      .pipe(
+        switchMap((product) => this.productsService.update(product.id, { title: 'New title' }))
+      )
+      .subscribe(data => console.log(data));
   }
 
   createNewProduct() {

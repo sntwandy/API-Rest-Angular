@@ -1,3 +1,6 @@
+# API-Rest-Angular
+Using API Rest requests on Angular
+
 # MyStoreApi
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli)

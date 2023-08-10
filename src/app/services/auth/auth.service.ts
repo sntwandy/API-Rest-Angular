@@ -15,7 +15,12 @@ export class AuthService {
     return this.http.post<Auth>(API_URL_AUTH_LOGIN, { email, password });
   }
 
-  profile() {
-    return this.http.get<User>(API_URL_AUTH_PROFILE);
+  profile(token: string) {
+    return this.http.get<User>(API_URL_AUTH_PROFILE, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // 'Content-tyoe': 'aplication/json'
+      }
+    });
   }
 }

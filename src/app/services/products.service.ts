@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, map, retry } from 'rxjs/operators';
 import { CreateProductDTO, Product, UpdateProductDTO } from './../models/product.model';
 import { API_URL } from 'src/app/constant';
-import { retry } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 @Injectable({
@@ -21,7 +20,15 @@ export class ProductsService {
     }
 
     return this.http.get<Product[]>(API_URL, { params })
-      .pipe(retry(2));
+      .pipe(
+        retry(2),
+        map(products => products.map(item => {
+          return {
+            ...item,
+            taxes: .19 * item.price
+          }
+        }))
+      )
   }
 
   getProduct(id: string) {

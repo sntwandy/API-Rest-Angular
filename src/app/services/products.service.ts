@@ -5,6 +5,8 @@ import { CreateProductDTO, Product, UpdateProductDTO } from './../models/product
 import { API_URL_PRODUCTS } from 'src/app/constant';
 import { throwError } from 'rxjs';
 
+import { checkTime } from 'src/app/interceptors/time.interceptor';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,7 +21,7 @@ export class ProductsService {
       params = params.set('offset', offset);
     }
 
-    return this.http.get<Product[]>(API_URL_PRODUCTS, { params }).pipe(
+    return this.http.get<Product[]>(API_URL_PRODUCTS, { params, context: checkTime() }).pipe(
       retry(2),
       map((products) =>
         products.map((item) => {

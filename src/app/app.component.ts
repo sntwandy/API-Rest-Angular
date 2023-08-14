@@ -12,7 +12,8 @@ import { FilesService } from 'src/app/services/files/files.service';
 export class AppComponent {
   imgParent = '';
   showImg = true;
-  token = ''
+  token = '';
+  imgResponse = '';
 
   constructor(
     private authService: AuthService,
@@ -56,5 +57,15 @@ export class AppComponent {
         'application/pdf'
       )
       .subscribe((response) => console.log(response, 'Downloaded'));
+  }
+
+  onUpload(event: Event) {
+    const element = event.target as HTMLInputElement;
+    const file = element.files?.item(0)
+    if (file) {
+      this.filesService
+        .upload(file)
+        .subscribe((response) => console.log(response));
+    }
   }
 }
